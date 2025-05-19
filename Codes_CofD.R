@@ -30,13 +30,15 @@ tab <- table(cofd$Seasons)
 tab
 prop.table(tab)*100
 
+tab <- table(cofd$Sex)
+tab
+prop.table(tab)*100
+
 tab <- table(cofd$CofD)
 tab
 prop.table(tab)*100
 
-tab <- table(cofd$Sex)
-tab
-prop.table(tab)*100
+
 
 tab <- table( cofd$Decade, cofd$Sex)
 tab
@@ -84,7 +86,26 @@ tab
 prop.table(tab,1)*100
 chisq.test(tab)
 
-tab <- table( cofd$CofD, cofd$Age_cat)
+tab <- table(cofd$Sex, cofd$Age_cat)
 tab
 prop.table(tab,1)*100
 chisq.test(tab)
+
+
+
+
+model <- glm(relevel(factor(cofd$Sex), ref = "Female")~ relevel(factor(cofd$Decade), ref = "2017-2021") + relevel(factor(cofd$Seasons), ref = "Rainy") 
+              + relevel(factor(cofd$Age_cat), ref = "18+") + relevel(factor(cofd$CofD), ref = "Other"),
+             family=binomial(link='logit'),data=cofd)
+summary(model)
+exp(cbind(coef(model), confint(model)))
+
+
+model <- glm(relevel(factor(cofd$Age_cat), ref = "18+")~ relevel(factor(cofd$Decade), ref = "2017-2021") + relevel(factor(cofd$Seasons), ref = "Rainy") 
+             + relevel(factor(cofd$Sex), ref = "Female") + relevel(factor(cofd$CofD), ref = "Other"),
+             family=binomial(link='logit'),data=cofd)
+summary(model)
+exp(cbind(coef(model), confint(model)))
+
+
+
